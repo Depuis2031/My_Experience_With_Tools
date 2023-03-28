@@ -1,0 +1,24 @@
+TELL ME ABOUT YOUR EXPERIENCE WITH AWS?
+I have used AWS services such as:
+Compute
+Networking
+Security
+Storage and
+Database
+
+I have managed aws service from the console and equally from the AWS-CLI.
+In my environment, we use terraform an IaC tool to manage aws services such as
+Iam for security and access control
+Ec2 for our server resources 
+Creating and assigning SG for our ec2 instances
+
+I have created RDS, ebs volumes and using this as a root file system for our instances and databases.
+
+I have created s3 bucket for our object storage and data migration and as well as using the s3 bucket as backend for our terraform statefile.
+
+I have created aws networks using the vpc concepts and its components such as Nat Gateway, IGW, subnet, routtable and Network access control list.
+
+I have provisioned route53 for dns resolution, created k8s clusters using a managed aws services eks, managed container services such as ecr.
+
+I have also provisioned ASG, lauch template and custom AMI's using packer.
+These and many more are my exp in aws...
