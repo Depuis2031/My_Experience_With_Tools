@@ -1,0 +1,110 @@
+Obinna G26, [26/03/2023 15:32]
+KUBERNETES:
+
+Tell me about your experince in kubernetes?
+
+When i joined my org, we where deploying our applications using kops which is 
+a self managed cluster. This has its shortcomings because we devoted lot of time managing the 
+control plane and the worker node ratherthan our applications.
+
+  I made a research and came up with eks, a managed cluster in which aws is
+managing the control plane whereas we focus on the worker node. 
+I proposed the idea to my team and managers, and this was adopted and till date we use this eks 
+cluster in my environment.
+
+It might interest you to know that k8s has 2 major component, the control plane and the worker.
+The control plane consist of the apiServer, the etcD, the scheduler and the controller manager.
+The worker Node consist of the kublet, kube-proxy and the containerRuntime (containerd).
+Once an apiCall is made, such kubectl create/apply/delete, this call is received by the apiServer
+which then checks the .kube/config file to accertain that the caller has the authentication/authorization to make the call
+and once this is proved, it is persisted in the etcD which is a key value store.
+The scheduler picks this up and cordinates with the kublet on the worker node checking for a 
+node with sufficient amount for resources and assigns the pod to run on that node.
+The kublet triggers the ContainerRuntime (containerd) and a pod is created.
+
+In my environment, we do not deploy our applications using pods because the lifecycle of pods 
+are ephemiral.
+I have been able to deploy custom and third party applications using k8s objects like ReplicationControllers,
+ReplicaSet, DaemonSet, StatefulSet and Deployment.
+I have deployed stateless applications using k8s default deployment reccomended object deployment.
+With deployment, using rollingupdate strategy iam able to rollout ReplicaSet of deployments/applications
+at zero downtime.
+This ensures that we can rollback and rollout with relative ease unlike the recreate strategy.
+Depending on the project, we also use the blue-green and canary deployment techniques as well for deployment.
+
+I have deployed server monitoring tools like prometheus and grafana.
+This deployment comes with prometheus-server, the kube state metrics,alertmanager and the nodeexporter.
+In my environment, nodeexporter is deployed as DaemonSet which ensures that 1 replica of pod runs 
+in each node in the cluster. With this we are able to monitor k8s object and cluster state
+due to the metrics collected by the nodeexporter, kube state metrics and we visualize this through the grafana dashboard.
+This ensures the availability of our application and helps avoid reactive panics.
+It helps us in troubleshooting, increases uptime as well as gives us/our client an immediate return on investment.
+
+I have also used helm to deploy ingress controller, metrics server, EFK, karpenter and other third party application to enhance our k8s cluster performance.
+
+Security is one aspect we cannot compromise because it is inherent in all we do and the best way i have
+implimented this in my kubernestes workloads is by using only authorized images from amazon ecr, dockerhub and nexus.
+Limiting direct access to k8s nodes by the use of kubectl cli.
+
+We create administrative boundries by the use of namespaces such that developers, engineers and admins
+has their namespaces and a defined ResourseQuota for the said namespaces in other for the users in the cluster
+not to deplit our resources.
+I have used k8s object like limitrange to force default metrics requests for pods deployed without resources
+requests and limits.
+
+Obinna G26, [26/03/2023 15:32]
+In my environment, we use the concept of RBAC to define the role of a user, groups in our cluster by creating
+role and role binding, clusterrole and clusterrole binding and service accounts for k8s objects.
+I have also taken security to new height in my environment by deploying our worker node in the private
+subnet, creating a cluster ip type service for our applications at the backend and exposing our application to 
+end users via an ingress rule and a LoadBalancer type service created by the ingress controller pod at the public subnet.
+
+We use the services of aws route 53 to create a public hosted zone for our domains and using this domainNames
+to create an A record to expose our applications to end users.
+
+HAVE YOU MADE USE OF CRD IN k8s?
+CRD--> Custom resource definintion
+
+TELL ME ABOUT THE TOOLS YOU HAVE USED IN YOUR ENVIRONMENT:
+
+I have used git for versioning, gitHub for sourceCode management, jenkins for ci/cd automation, maven for build, sonarqube for static Code analysis, trivy for scanning of our dockerimages,
+nexus for artifactory management, tomcat/jboss for deployment of monolitic web/enterprise application,
+Ansible for configuration management, terraform for provisioning of infrastructure,docker for containerization and kubernetes for container ochestration.
+I have leveraged the services of aws cloud such compute, networking, security, storage and database.
+
+WHAT IS GIT WORKFLOW:
+
+Obinna G26, [28/03/2023 08:20]
+WHAT IS GITWORKFLOW?
+
+In my environment, we manage our code using 4 git working process:
+The working area
+The staging area
+The local repository and 
+The remote repository
+Files in the working areas are red whereas files in the staging areas are green.
+Git workflow includes,
+git init --> initializies the git repository and downloads the required plugins.
+git status --> track changes to files
+git add <fileName> --> moves files from the working area to the staging area
+git commit <fileName> -m "good commit msg" --> moves files from the staging area to the local repo
+git log --> displays your commits
+git remote add aliasName RepoURL --> Adds your remote repository
+git push aliasName branch --> pushes your code from the local repo to the remote repository.
+
+
+
+
+WHAT IS GITOPS PRINCIPLE?
+
+GitOps principle entails that no work should be done on the main/master branch.
+Create a branch out of the main branch and do your developmental work.
+Push the code to your remote repository and open a pull request, do a peer review and lets your team members approve the pull request before merging to the main branch.
+
+
+
+TELL ME ABOUT YOUR EXPERIENCE IN GIT/GITHUB
+gitops
+security
+branching strategy
+gitworkflow
