@@ -1,0 +1,145 @@
+Infra Project:
+  -VPC / subnets
+  - load balance
+  - DB
+  - Web / App servers
+  - S3
+  - DNS
+  - cdn
+  - Iam Roles
+  - Monitoring tools
+
+  Sequence:
+  - Repositories
+  - s3 backend
+  - vpc
+  - web/app/db
+  - iam roles
+
+  Jira:
+  - Ticketing/ bug tracking
+  - Agile 
+  - Agile boards - organise the work: 
+    Scrum / Kanban
+
+  Sprint meetings: - discuss last sprint
+        - what went well / did not go well
+        - work to be completed in the next sprint
+        - create a sprint workflow / prioritizing work
+
+
+  ===========================================================================================
+Terraform:
+- iac = manage and provision infra.
+   - statefile - list of all resources
+  - cloud agnostic = can be used with any / multiple cloud = aws,gcp,alibaba, kubernetes,azure = api
+benefits - speed / consistency / repeatable / reduce errors
+vendor - hashicorp = terraform, packer, vault
+- download the binary = running terraform locally = running terraform commands from a local environment/ workstation / pipeline 
+= Run terraform in the cloud = terraform cloud = enterprise / subscription
+= Where you download binary = backend = where you run terraform operations
+
+how it works:
+- Configuration files / manifest files - .tf extension / .tf.json( )
+= HCL - GO
+
+Workflow: main.tf / bootcamp30.tf
+        - invoke terraform = download provider plugins
+terraform init: provider plugin / modules / set or initialise working dir = the dir that contains terraform manifest files
+
+terraform validate: syntax / consistency
+terraform fmt: syntax is correct
+terraform plan : create an execution plan / blue print
+           = credentials are required to generate a plan
+terraform apply : apply the changes to reach desired state
+terraform destroy: destroy terraform managed resources / ask for confirmation
+
+
+===============================
+Terraform blocks: 9 top level blocks
+
+1. Terraform setting block:
+
+terraform {
+  required_version = "~> 1.0"         1.1.4/5/6/7   1.2/3/4/5 1.1.4/5/6/7
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+  backend "s3" {
+    bucket = "terraform-mylandmark"
+    key    = "prod/terraform.tfstate"
+    region = "us-west-2"
+    dynamodb_table = "terraform-lock"
+  }
+}
+
+2. Provider block: plugin /api
+
+provider "aws" {
+  #profile = "default" # AWS Credentials Profile configured on your local desktop terminal  $HOME/.aws/credentials
+  region  = "us-west-2"
+}
+
+3. Resource block:
+  resource "aws_instance" "bootcamp31" {
+     #ami           = "ami-0e5b6b6a9f3db6db8" # Amazon Linux
+     ami = data.aws_ami.ubuntu.id
+     instance_type = var.instance_type[1]
+     delete_on_termination = true
+
+     tags = {
+      Name = local.name
+     }
+    }
+
+4. Variables block / inputs
+
+variable "instance_type" {
+  description = "EC2 Instance Type"
+  type = list(string)
+  default = ["t2.micro", "t2.medium"]
+}
+
+5. Output blocks:
+
+output "public_ip" {
+  description = "ec2 instance public ip"
+  value = aws_instance.inst1.arn
+}
+
+6. local value blocks:
+
+  locals {
+    name = "${var.app_name}-${var.environment}"
+  }
+  jenkins-production
+
+7. Data sources:
+   data "aws_ami" "ubuntu" {
+     most_recent = true
+     owners = ["self"]
+
+     filter {
+      name = "name"
+      value = ["packer-docker"]
+     }
+   }
+
+8. Modules block:
+
+  module "ec2" {
+    source = "./my_instance"
+    version = "1.0.1"
+
+    instance_type = var.instance_type
+  }
+
+9. moved blocks
+
+moved {
+  from = "aws_instance.bootcamp30 "
+  to = "aws_instance.bootcamp31 "
+}
