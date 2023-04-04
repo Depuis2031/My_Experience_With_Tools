@@ -97,10 +97,10 @@ provider "aws" {
 
 4. Variables block / inputs
 
-variable "instance_type" {
-  description = "EC2 Instance Type"
-  type = list(string)
-  default = ["t2.micro", "t2.medium"]
+variable "instance_type" {             #imperative and needed.
+  description = "EC2 Instance Type"    #optional
+  type = list(string)                  #imperative
+  default = ["t2.micro", "t2.medium"]  #optional and will require you to input the type of instance you intend to create. it can be commented upon to demand input 
 }
 
 5. Output blocks:
